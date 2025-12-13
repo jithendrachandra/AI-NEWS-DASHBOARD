@@ -1,0 +1,70 @@
+services:
+  db:
+    image: pgvector/pgvector:pg15
+    container_name: ai_news_db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: ai_news
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d ai_news"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - ai_news_network
+    ports:
+      - "5432:5432"
+
+  backend:
+    build: ./backend
+    container_name: ai_news_backend
+    env_file:
+      - ./backend/.env
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - backend_cache:/root/.cache
+    networks:
+      - ai_news_network
+    command: >
+      sh -c "
+        echo '🔄 Waiting for database...' &&
+        sleep 5 &&
+        echo '📦 Running migrations...' &&
+        alembic upgrade head &&
+        echo '🌱 Seeding sources...' &&
+        python scripts/seed_sources.py &&
+        echo '🚀 Starting server...' &&
+        uvicorn app.main:app --host 0.0.0.0 --port 8000
+      "
+
+  frontend:
+    build: ./frontend
+    container_name: ai_news_frontend
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
+    networks:
+      - ai_news_network
+
+networks:
+  ai_news_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  backend_cache:
