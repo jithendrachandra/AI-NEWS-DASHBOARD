@@ -1,47 +1,126 @@
-# 🧠 AI News Dashboard
+🧠 AI News Dashboard
+AI News Aggregation & Broadcasting Dashboard with HuggingFace-powered analysis
 
-> Real-time AI News Aggregation & Broadcasting Platform powered by HuggingFace models
+✨ Features
+📰 Automated News Ingestion from 20+ top AI sources (blogs, RSS, APIs)
 
-## ✨ Features
+🤖 AI-Powered Analysis using HuggingFace Inference API
 
-- 📰 **Automated News Ingestion** from 20+ top AI sources
-- 🤖 **AI-Powered Analysis** using HuggingFace Inference API
-- 🔍 **Semantic Search** with vector embeddings (384-dim all-MiniLM-L6-v2)
-- 📊 **Impact Scoring** & sentiment analysis
-- 📣 **Multi-Platform Broadcasting** (LinkedIn, Email, WhatsApp)
-- 🎯 **Category Filtering** (Research, Product, Business, Policy)
-- ⚡ **Real-time Updates** every 15 minutes
-- 🗄️ **PostgreSQL + pgvector** for similarity search
+🔍 Semantic Search with local vector embeddings (all-MiniLM-L6-v2, 384-dim)
 
-## 🏗️ Architecture
+📊 Impact Scoring & sentiment analysis with sensible fallbacks
 
-```
-┌─────────────┐     ┌──────────────┐     ┌─────────────┐
-│   20+ RSS   │────▶│   Backend    │────▶│  PostgreSQL │
-│   Sources   │     │   (FastAPI)  │     │  + pgvector │
-└─────────────┘     └──────────────┘     └─────────────┘
-                           │
-                           │ HuggingFace API
-                           │ (Text Analysis + Embeddings)
-                           ▼
-                    ┌──────────────┐
-                    │   Frontend   │
-                    │  (Next.js)   │
-                    └──────────────┘
-```
+⭐ Favorites & Dashboard with dedicated favorites tab
 
-## 🚀 Quick Start
+📣 Broadcast Simulation (Email, LinkedIn, WhatsApp) with clear UI + logs
 
-### Prerequisites
+🎯 Category Filtering (Research, Product, Business, Policy, Other)
 
-- Docker & Docker Compose
-- HuggingFace API Key (free tier works!)
-- 4GB+ RAM
+⚡ Periodic Updates via ingestion script (can be run every 15 minutes)
 
-### 1. Clone & Configure
+🗄️ PostgreSQL + pgvector-ready schema for similarity search
 
-```bash
-git clone <your-repo>
+
+
+
+![alt text](assets/img-1.png)
+![alt text](assets/img-2.png)
+![alt text](assets/img-3.png)
+![alt text](assets/img-4.png)
+
+
+
+
+
+🏗️ Architecture
+
+
+┌─────────────┐      ┌──────────────┐      ┌─────────────┐
+│  20+ AI     │ ---> │  Ingestion   │ ---> │ PostgreSQL  │
+│  Sources    │      │  (FastAPI +  │      │ (news, src, │
+│  (RSS/APIs) │      │  scripts)    │      │ favorites)  │
+└─────────────┘      └──────────────┘      └─────────────┘
+                             │
+                             │ HuggingFace Inference API
+                             │ (Text analysis)
+                             ▼
+                       ┌──────────────┐
+                       │   Backend    │
+                       │   (FastAPI)  │
+                       └──────────────┘
+                             │  REST API
+                             ▼
+                       ┌──────────────┐
+                       │  Frontend    │
+                       │  (Next.js)   │
+                       └──────────────┘
+
+Ingestion Layer: scripts + API endpoints for fetching, normalizing, and storing news.
+
+Processing: deduplication, summarization, impact scoring, basic clustering.
+
+Broadcast Layer: mocked Email / LinkedIn / WhatsApp calls with detailed logs and responses.
+
+
+
+
+
+🚀 Quick Start
+
+## 🐳 Running with Docker Compose
+
+This project ships with a ready-to-use `docker-compose.yml` that starts:
+
+- `ai_news_backend` (FastAPI API + ingestion + HuggingFace integration)
+- `ai_news_frontend` (Next.js dashboard)
+- `ai_news_db` (PostgreSQL database)
+
+### 1. Build images and start services
+
+From the project root (where `docker-compose.yml` lives):
+
+docker-compose up --build
+
+text
+
+- `--build` forces Docker Compose to (re)build the backend and frontend images before starting the containers, so code and Dockerfile changes are picked up. [web:93][web:96]
+- Logs from all services will stream in the same terminal.
+
+To run in the background:
+
+docker-compose up -d --build
+
+text
+
+### 2. Stop and clean up
+
+To stop containers but keep data volumes:
+
+docker-compose down
+
+text
+
+To stop and also remove volumes (including the Postgres data):
+
+docker-compose down -v
+
+text
+
+Use `down -v` if you want a completely fresh database and re-run migrations and seeding from scratch. [web:93][web:101]
+
+
+
+
+Prerequisites
+Docker & Docker Compose
+
+HuggingFace API Key (free tier is enough)
+
+4GB+ RAM
+
+1. Clone & Configure
+
+git clone https://github.com/jithendrachandra/AI-NEWS-DASHBOARD.git
 cd ai-news-dashboard
 
 # Create backend .env file
@@ -49,68 +128,58 @@ cp backend/.env.example backend/.env
 
 # Edit backend/.env and add:
 # HUGGINGFACE_API_KEY=your_key_here
-```
+2. Get HuggingFace API Key
+Visit https://huggingface.co/settings/tokens
 
-### 2. Get HuggingFace API Key
+Create a new token (read access is enough)
 
-1. Go to https://huggingface.co/settings/tokens
-2. Create a new token (read access is enough)
-3. Copy it to `backend/.env`
+Paste it into backend/.env as HUGGINGFACE_API_KEY
 
-### 3. Start Everything
-
-```bash
+3. Start Everything
+bash
 # Build and start all services
 docker-compose up --build
 
 # OR run in detached mode
 docker-compose up -d
-```
+4. Access the Dashboard
+Frontend: http://localhost:3000
 
-### 4. Access the Dashboard
+Backend API: http://localhost:8000
 
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:8000
-- API Docs: http://localhost:8000/docs
+API Docs (Swagger): http://localhost:8000/docs
 
-## 📦 What Happens on First Run
+📦 What Happens on First Run
+✅ PostgreSQL container starts (with schema ready for pgvector if enabled)
 
-1. ✅ PostgreSQL starts with pgvector extension
-2. ✅ Alembic runs database migrations
-3. ✅ 20 news sources are seeded automatically
-4. ✅ HuggingFace model downloads (first time only)
-5. ✅ News ingestion starts (runs every 15 min)
+✅ Alembic migrations run and create tables (sources, news_items, favorites, etc.)
 
-## 🛠️ Manual Operations
+✅ ~20 AI news sources are seeded into the sources table
 
-### Run Migrations
+✅ Local embedding model (all-MiniLM-L6-v2) loads in the backend
 
-```bash
+✅ Ingestion script can be triggered to fetch and store latest AI news
+
+For “near real-time” behaviour, you can run the ingestion script on a schedule (e.g., every 15 minutes via cron or a simple scheduler).
+
+🛠️ Manual Operations
+Run Migrations
+bash
 docker exec -it ai_news_backend alembic upgrade head
-```
-
-### Seed Sources Manually
-
-```bash
+Seed Sources Manually
+bash
 docker exec -it ai_news_backend python scripts/seed_sources.py
-```
-
-### Trigger News Ingestion
-
-```bash
+Trigger News Ingestion (one-off)
+bash
 docker exec -it ai_news_backend python scripts/run_ingestion.py
-```
+You can hook this into a cron/job scheduler to keep the feed fresh.
 
-### Test HuggingFace Service
-
-```bash
+Test HuggingFace Service
+bash
 docker exec -it ai_news_backend python scripts/test_huggingface.py
-```
-
-### View Logs
-
-```bash
-# All logs
+View Logs
+bash
+# All services
 docker-compose logs -f
 
 # Backend only
@@ -118,85 +187,84 @@ docker logs ai_news_backend --tail=100 -f
 
 # Frontend only
 docker logs ai_news_frontend --tail=100 -f
-```
-
-### Database Access
-
-```bash
+Database Access
+bash
 docker exec -it ai_news_db psql -U user -d ai_news
 
 # Useful queries
-\dt                           # List tables
+\dt;
 SELECT COUNT(*) FROM news_items;
-SELECT * FROM sources;
-```
-
-## 🔧 Development
-
-### Backend Development
-
-```bash
+SELECT * FROM sources LIMIT 10;
+🔧 Development
+Backend Development
+bash
 cd backend
 
-# Create virtual environment
 python -m venv venv
 source venv/bin/activate  # or `venv\Scripts\activate` on Windows
 
-# Install dependencies
 pip install -r requirements.txt
-
-# Run locally
-uvicorn main:app --reload
-```
-
-### Frontend Development
-
-```bash
+uvicorn app.main:app --reload
+Frontend Development
+bash
 cd frontend
 
-# Install dependencies
 npm install
-
-# Run dev server
 npm run dev
-```
+📚 API Endpoints (MVP)
+News
+GET /api/v1/news/ – List news (with filters: min_impact, limit, etc.)
 
-## 📚 API Endpoints
+GET /api/v1/news/{id} – Get a single news item
 
-### News Endpoints
+POST /api/v1/news/search – Semantic search over news
 
-- `GET /api/v1/news/` - Get all news (with filters)
-- `GET /api/v1/news/{id}` - Get specific news item
-- `POST /api/v1/news/search` - Semantic search
-- `GET /api/v1/news/categories/list` - Get all categories
-- `GET /api/v1/news/stats/dashboard` - Dashboard statistics
+GET /api/v1/news/categories/list – List available categories
 
-### Source Endpoints
+GET /api/v1/news/stats/dashboard – High-level stats (counts, impact, etc.)
 
-- `GET /api/v1/sources/` - List all sources
-- `POST /api/v1/sources/` - Add new source
+Sources
+GET /api/v1/sources/ – List all sources
 
-### Broadcast Endpoints
+POST /api/v1/sources/ – Add a new news source
 
-- `POST /api/v1/broadcast/` - Broadcast news item
+Broadcast (Simulated)
+POST /api/v1/broadcast/ – Simulate broadcasting a favorite to:
 
-## 🎯 Models Used
+Email
 
-### Text Analysis
-- **Model**: Any HuggingFace model (default: GPT-2-style models)
-- **Task**: Summarization, impact scoring, sentiment analysis
-- **Fallback**: Keyword-based analysis if API fails
+LinkedIn
 
-### Embeddings
-- **Model**: `sentence-transformers/all-MiniLM-L6-v2`
-- **Dimensions**: 384
-- **Execution**: Local (fast, no API calls needed!)
+WhatsApp
 
-## 🔐 Environment Variables
+The backend logs and API response clearly indicate that the action is simulated, matching the BRD’s “mocked or actual” requirement.​
 
-### Backend (.env)
+🎯 Models & AI
+Text Analysis
+Model: HuggingFace text-generation / LLM endpoint (configurable)
 
-```env
+Tasks:
+
+News summarization (short summary)
+
+Impact scoring (0–100)
+
+Sentiment classification (Positive / Neutral / Negative)
+
+Category suggestion (Research / Product / Business / Policy / Other)
+
+Fallback: If the API fails or rate limits, a deterministic keyword-based heuristic is used to avoid junk output.​
+
+Embeddings
+Model: sentence-transformers/all-MiniLM-L6-v2
+
+Dimensions: 384
+
+Execution: Loaded locally inside the backend container for fast, offline semantic search.​
+
+🔐 Environment Variables
+Backend (backend/.env)
+text
 # Database
 DATABASE_URL=postgresql://user:password@db:5432/ai_news
 
@@ -211,21 +279,14 @@ HUGGINGFACE_EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
 # Rate Limiting
 MAX_REQUESTS_PER_MINUTE=30
 
-# CORS
-BACKEND_CORS_ORIGINS=http://localhost:3000,http://localhost:8000
-```
-
-### Frontend (.env.local)
-
-```env
+# CORS (comma-separated)
+BACKEND_CORS_ORIGINS_RAW=http://localhost:3000,http://localhost:8000
+Frontend (frontend/.env.local)
+text
 NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
-```
-
-## 🐛 Troubleshooting
-
-### No news appearing?
-
-```bash
+🐛 Troubleshooting
+No news appearing?
+bash
 # Check if sources exist
 docker exec -it ai_news_db psql -U user -d ai_news -c "SELECT * FROM sources;"
 
@@ -234,64 +295,46 @@ docker exec -it ai_news_backend python scripts/run_ingestion.py
 
 # Check backend logs
 docker logs ai_news_backend --tail=50
-```
+HuggingFace API issues?
+Free tier has rate limits; the app rate-limits calls via MAX_REQUESTS_PER_MINUTE.​
 
-### HuggingFace API errors?
+Embeddings are generated locally; only text analysis uses the API.
 
-- Free tier has rate limits (30 req/min for some endpoints)
-- The app uses local embeddings by default (no API calls)
-- Text analysis might hit limits - increase MAX_REQUESTS_PER_MINUTE
+If the API is unavailable, the app falls back to deterministic analysis.
 
-### Database migration issues?
-
-```bash
-# Reset migrations
+Migration / DB issues?
+bash
+# Reset migrations (dev only)
 docker exec -it ai_news_backend alembic downgrade base
 docker exec -it ai_news_backend alembic upgrade head
 
-# Or rebuild from scratch
+# Or rebuild completely
 docker-compose down -v
 docker-compose up --build
-```
+📈 Production Notes (Optional)
+Backend: Railway / Render / Fly.io / ECS
 
-## 📈 Production Deployment
+Frontend: Vercel / Netlify
 
-### Recommended Stack
+Database: Managed Postgres (Neon / Supabase) with pgvector extension
 
-- **Backend**: Railway / Render / Fly.io
-- **Frontend**: Vercel / Netlify
-- **Database**: Neon / Supabase (with pgvector)
+Checklist:
 
-### Production Checklist
+Use a strong SECRET_KEY
 
-- [ ] Use strong SECRET_KEY
-- [ ] Set BACKEND_CORS_ORIGINS to production URLs
-- [ ] Use production database (not SQLite)
-- [ ] Enable HTTPS
-- [ ] Set up monitoring (Sentry recommended)
-- [ ] Configure proper rate limiting
-- [ ] Set up backup strategy
-- [ ] Use environment-specific .env files
+Tighten BACKEND_CORS_ORIGINS_RAW to your production domains
 
-## 🤝 Contributing
+Configure HTTPS, monitoring, and backups
 
-Contributions welcome! Please:
+Use separate env files for dev/stage/prod
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
+🤝 Contributing
+Fork the repository
 
-## 📄 License
+Create a feature branch
 
-MIT License - feel free to use for any purpose!
+Implement changes (with tests where appropriate)
 
-## 🙏 Acknowledgments
+Open a Pull Request
 
-- HuggingFace for amazing models and APIs
-- FastAPI team for the incredible framework
-- pgvector for vector similarity search
-
----
-
-Built with ❤️ using FastAPI, Next.js, and HuggingFace
+Built with ❤️ using FastAPI, Next.js, PostgreSQL, and HuggingFace.
