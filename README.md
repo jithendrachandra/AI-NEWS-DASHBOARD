@@ -56,26 +56,61 @@ AI News Aggregation & Broadcasting Dashboard with HuggingFace-powered analysis
 
 🏗️ Architecture
 
++-------------------------------------------------------------+
+|                     AI News Sources                         |
+|  OpenAI Blog, Google AI, TechCrunch, Reddit, arXiv, etc.    |
++-----------------------------+-------------------------------+
+                              |
+                              v
++-------------------------------------------------------------+
+|                  Ingestion & Fetcher Layer                  |
+|  - Scheduled scripts / jobs (run_ingestion.py)              |
+|  - RSS/API fetch (requests, feedparser, etc.)              |
+|  - Normalization (title, summary, url, date, tags)         |
++-----------------------------+-------------------------------+
+                              |
+                              v
++-------------------------------------------------------------+
+|                    Processing / AI Layer                    |
+|  - Deduplication & clustering                               |
+|  - HuggingFace analysis (summary, impact, sentiment)        |
+|  - Local embeddings (all-MiniLM-L6-v2, 384-dim)             |
++-----------------------------+-------------------------------+
+                              |
+                              v
++-------------------------------------------------------------+
+|                    Database Layer (Postgres)                |
+|  - sources                                                  |
+|  - news_items                                               |
+|  - favorites                                                |
+|  - broadcast_logs                                           |
++-----------------------------+-------------------------------+
+                              |
+                              v
++-------------------------------------------------------------+
+|                    Backend API (FastAPI)                    |
+|  - /api/v1/news (feed, filters, search)                     |
+|  - /api/v1/favorites (add/remove)                           |
+|  - /api/v1/broadcast (simulate Email/LinkedIn/WhatsApp)     |
+|  - HuggingFace service & rate limiting                      |
++-----------------------------+-------------------------------+
+                              |
+                              v
++-------------------------------------------------------------+
+|                 Frontend Dashboard (Next.js)                |
+|  - News feed (listing, filters, search)                     |
+|  - Favorites tab                                            |
+|  - Broadcast buttons (Email, LinkedIn, WhatsApp)            |
+|  - Stats & basic charts                                     |
++-----------------------------+-------------------------------+
+                              |
+                              v
++-------------------------------------------------------------+
+|                   Broadcast Layer (Simulated)               |
+|  - Logs mocked Email / LinkedIn / WhatsApp actions          |
+|  - Optionally records entries in broadcast_logs             |
++-------------------------------------------------------------+
 
-┌─────────────┐      ┌──────────────┐      ┌─────────────┐
-│  20+ AI     │ ---> │  Ingestion   │ ---> │ PostgreSQL  │
-│  Sources    │      │  (FastAPI +  │      │ (news, src, │
-│  (RSS/APIs) │      │  scripts)    │      │ favorites)  │
-└─────────────┘      └──────────────┘      └─────────────┘
-                             │
-                             │ HuggingFace Inference API
-                             │ (Text analysis)
-                             ▼
-                       ┌──────────────┐
-                       │   Backend    │
-                       │   (FastAPI)  │
-                       └──────────────┘
-                             │  REST API
-                             ▼
-                       ┌──────────────┐
-                       │  Frontend    │
-                       │  (Next.js)   │
-                       └──────────────┘
 
 Ingestion Layer: scripts + API endpoints for fetching, normalizing, and storing news.
 
