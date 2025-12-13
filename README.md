@@ -21,36 +21,10 @@ AI News Aggregation & Broadcasting Dashboard with HuggingFace-powered analysis
 🗄️ PostgreSQL + pgvector-ready schema for similarity search
 
 
-
-
 ![alt text](assets/img-1.png)
 ![alt text](assets/img-2.png)
 ![alt text](assets/img-3.png)
 ![alt text](assets/img-4.png)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
