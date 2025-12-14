@@ -29,7 +29,5 @@ RUN chmod +x scripts/*.py || true
 
 EXPOSE 8000
 
-# Default command (can be overridden in docker-compose)
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
-
-
+# Use Render's PORT env var (defaults to 8000 locally)
+CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
