@@ -3,9 +3,6 @@
 > A production-grade news aggregation platform leveraging HuggingFace's AI capabilities for intelligent content discovery and analysis.
 
 ![Dashboard Preview](assets/Dashboard-interface.png)
-![Dashboard Preview](assets/Favorites-page.png)
-![Dashboard Preview](assets/Broadcast.png)
-![Dashboard Preview](assets/view.png)
 
 ## Overview
 
@@ -446,19 +443,19 @@ Simulated broadcasts demonstrate the integration pattern and data flow while avo
 ## Screenshots
 
 ### Main Dashboard
-![News Feed Interface](assets/img-1.png)
-*The main interface showing categorized news articles with impact scores and filtering options*
 
+*The main interface showing categorized news articles with impact scores and filtering options*
+![Dashboard Preview](assets/Dashboard-interface.png)
 ### Favorites Management
-![Favorites View](assets/img-2.png)
+![Dashboard Preview](assets/Favorites-page.png)
 *Saved articles with broadcast options for sharing across platforms*
 
 ### Semantic Search
-![Search Interface](assets/img-3.png)
+![Dashboard Preview](assets/Broadcast.png)
 *AI-powered semantic search finding relevant articles based on meaning rather than keywords*
 
 ### Analytics Dashboard
-![Statistics View](assets/img-4.png)
+![Dashboard Preview](assets/view.png)
 *Aggregate metrics showing content distribution and trending categories*
 
 ## License
