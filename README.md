@@ -2,10 +2,10 @@
 
 > A production-grade news aggregation platform leveraging HuggingFace's AI capabilities for intelligent content discovery and analysis.
 
-![Dashboard Preview](assets/img-1.png)
-![Dashboard Preview](assets/img-2.png)
-![Dashboard Preview](assets/img-3.png)
-![Dashboard Preview](assets/img-4.png)
+![Dashboard Preview](assets/Dashboard-interface.png)
+![Dashboard Preview](assets/Favorites-page.png)
+![Dashboard Preview](assets/Broadcast.png)
+![Dashboard Preview](assets/view.png)
 
 ## Overview
 
