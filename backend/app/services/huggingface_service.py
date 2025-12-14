@@ -42,7 +42,7 @@ class HuggingFaceService:
         self.model_id = settings.HUGGINGFACE_MODEL_ID
         self.embedding_model_name = settings.HUGGINGFACE_EMBEDDING_MODEL
 
-        # ✅ NEW official HF endpoint (old one is deprecated)
+        #  NEW official HF endpoint (old one is deprecated)
         self.api_url = (
             f"https://router.huggingface.co/hf-inference/models/{self.model_id}"
         )
@@ -65,10 +65,10 @@ class HuggingFaceService:
                 self.embedding_model_name
             )
             self.use_local_embeddings = True
-            logger.info("✅ Local embedding model loaded successfully")
+            logger.info(" Local embedding model loaded successfully")
         except Exception as e:
             logger.error(
-                f"❌ Failed to load local embedding model: {e}"
+                f" Failed to load local embedding model: {e}"
             )
             logger.warning("Embeddings will be skipped if generation fails")
 

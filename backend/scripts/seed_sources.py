@@ -34,7 +34,7 @@ INITIAL_SOURCES = [
 def seed_sources():
     db = SessionLocal()
     try:
-        logger.info("🌱 Starting source seeding...")
+        logger.info(" Starting source seeding...")
         
         for name, url in INITIAL_SOURCES:
             try:
@@ -43,10 +43,10 @@ def seed_sources():
             except Exception as e:
                 logger.error(f"✗ {name}: {e}")
         
-        logger.info(f"\n✅ Successfully seeded {len(INITIAL_SOURCES)} sources")
+        logger.info(f"\n Successfully seeded {len(INITIAL_SOURCES)} sources")
         
     except Exception as e:
-        logger.error(f"❌ Seeding failed: {e}")
+        logger.error(f" Seeding failed: {e}")
     finally:
         db.close()
 

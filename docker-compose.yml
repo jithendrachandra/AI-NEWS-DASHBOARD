@@ -35,13 +35,13 @@ services:
       - ai_news_network
     command: >
       sh -c "
-        echo '🔄 Waiting for database...' &&
+        echo ' Waiting for database...' &&
         sleep 5 &&
-        echo '📦 Running migrations...' &&
+        echo ' Running migrations...' &&
         alembic upgrade head &&
-        echo '🌱 Seeding sources...' &&
+        echo ' Seeding sources...' &&
         python scripts/seed_sources.py &&
-        echo '🚀 Starting server...' &&
+        echo ' Starting server...' &&
         uvicorn app.main:app --host 0.0.0.0 --port 8000
       "
 

@@ -22,11 +22,11 @@ async def broadcast_news(news_item: NewsItem, platform: str, custom_message: str
     }
     
     if platform == "linkedin":
-        logger.info(f"✅ [LINKEDIN] Posted: {news_item.title}")
+        logger.info(f" [LINKEDIN] Posted: {news_item.title}")
     elif platform == "email":
-        logger.info(f"✅ [EMAIL] Sent to subscribers: {news_item.title}")
+        logger.info(f" [EMAIL] Sent to subscribers: {news_item.title}")
     elif platform == "whatsapp":
-        logger.info(f"✅ [WHATSAPP] Shared: {news_item.title}")
+        logger.info(f" [WHATSAPP] Shared: {news_item.title}")
     else:
         return {"status": "failed", "message": "Unknown platform"}
         

@@ -16,12 +16,12 @@ logger = logging.getLogger(__name__)
 async def run_ingestion():
     db = SessionLocal()
     try:
-        logger.info("🚀 Starting manual ingestion...")
+        logger.info(" Starting manual ingestion...")
         service = IngestionService(db)
         await service.run_ingestion_cycle()
-        logger.info("✅ Ingestion complete!")
+        logger.info(" Ingestion complete!")
     except Exception as e:
-        logger.error(f"❌ Ingestion failed: {e}")
+        logger.error(f" Ingestion failed: {e}")
     finally:
         db.close()
 

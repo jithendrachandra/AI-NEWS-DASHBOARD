@@ -25,7 +25,7 @@ class IngestionService:
         """
         Fetch a single RSS feed, deduplicate, analyze, embed, and store.
         """
-        logger.info(f"📡 Fetching {source.name}...")
+        logger.info(f" Fetching {source.name}...")
 
         try:
             # IMPORTANT: feedparser must receive headers
@@ -36,7 +36,7 @@ class IngestionService:
             )
 
             if not feed.entries:
-                logger.warning(f"⚠️ No entries found for {source.name}")
+                logger.warning(f" No entries found for {source.name}")
                 return
 
             processed_count = 0
@@ -69,7 +69,7 @@ class IngestionService:
                     # 4. Embedding
                     embedding = await hf_service.generate_embedding(raw_text)
                     if not embedding:
-                        logger.warning(f"⚠️ No embedding generated: {entry.title}")
+                        logger.warning(f" No embedding generated: {entry.title}")
                         continue
 
                     # 5. Parse published date safely
@@ -99,13 +99,13 @@ class IngestionService:
                     processed_count += 1
 
                     logger.info(
-                        f"✅ Saved: {entry.title[:60]} "
+                        f" Saved: {entry.title[:60]} "
                         f"(Impact: {analysis.get('impact_score', 50)})"
                     )
 
                 except Exception as entry_error:
                     logger.error(
-                        f"❌ Error processing entry from {source.name}: {entry_error}"
+                        f" Error processing entry from {source.name}: {entry_error}"
                     )
                     continue
 
@@ -115,18 +115,18 @@ class IngestionService:
             crud.update_source_fetch_stats(self.db, source.id)
 
             logger.info(
-                f"✅ {source.name}: Processed {processed_count} new items"
+                f" {source.name}: Processed {processed_count} new items"
             )
 
         except Exception as feed_error:
-            logger.error(f"❌ Failed to fetch {source.name}: {feed_error}")
+            logger.error(f" Failed to fetch {source.name}: {feed_error}")
             self.db.rollback()
 
     async def run_ingestion_cycle(self):
         """
         Run ingestion for all active sources.
         """
-        logger.info("🚀 Starting ingestion cycle...")
+        logger.info(" Starting ingestion cycle...")
 
         sources = (
             self.db.query(Source)
@@ -135,7 +135,7 @@ class IngestionService:
         )
 
         if not sources:
-            logger.warning("⚠️ No active sources found")
+            logger.warning(" No active sources found")
             return
 
         # Run concurrently
@@ -144,4 +144,4 @@ class IngestionService:
             return_exceptions=True,
         )
 
-        logger.info("✅ Ingestion cycle completed")
+        logger.info(" Ingestion cycle completed")

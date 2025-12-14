@@ -12,6 +12,7 @@ export interface NewsItem {
   category_cluster: string;
   view_count?: number;
   broadcast_count?: number;
+  is_favorited?: boolean;
 }
 
 export interface DashboardStats {
@@ -24,17 +25,17 @@ export async function fetchNews(minImpact: number = 0, category?: string) {
   try {
     const params = new URLSearchParams({
       min_impact: minImpact.toString(),
-      limit: "50"
+      limit: "50",
     });
-    
+
     if (category && category !== "all") {
       params.append("category", category);
     }
-    
+
     const res = await fetch(`${API_URL}/news/?${params}`, {
       cache: "no-store",
     });
-    
+
     if (!res.ok) throw new Error(`Error fetching news: ${res.statusText}`);
     return await res.json();
   } catch (error) {

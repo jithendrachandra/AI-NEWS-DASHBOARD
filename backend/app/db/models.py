@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, Text, DateTime, ForeignKey, Float
+from sqlalchemy import Column, Integer, String, Boolean, Text, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from pgvector.sqlalchemy import Vector
@@ -34,10 +34,9 @@ class NewsItem(Base):
     sentiment = Column(String, default="Neutral")
     category_cluster = Column(String, default="General")
 
-    embedding = Column(Vector(384))  # Changed from 768 to 384 for all-MiniLM-L6-v2
+    embedding = Column(Vector(384))
     created_at = Column(DateTime(timezone=True), server_default=func.now())
-    
-    # Metrics
+
     view_count = Column(Integer, default=0)
     broadcast_count = Column(Integer, default=0)
 
@@ -55,7 +54,7 @@ class Favorite(Base):
 
 class BroadcastLog(Base):
     __tablename__ = "broadcast_logs"
-    
+
     id = Column(Integer, primary_key=True)
     news_item_id = Column(Integer, ForeignKey("news_items.id"))
     platform = Column(String, nullable=False)

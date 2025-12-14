@@ -28,17 +28,17 @@ async def fetch_news_job():
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logger.info("🚀 Application startup")
+    logger.info(" Application startup")
 
     # Ensure pgvector exists (idempotent, safe)
     with engine.begin() as conn:
         conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
 
-    logger.info("✅ pgvector ready")
+    logger.info(" pgvector ready")
 
     # Create tables
     Base.metadata.create_all(bind=engine)
-    logger.info("✅ Database schema ready")
+    logger.info(" Database schema ready")
 
     scheduler.add_job(fetch_news_job, "interval", minutes=15)
     scheduler.start()
@@ -46,7 +46,7 @@ async def lifespan(app: FastAPI):
     yield
 
     scheduler.shutdown()
-    logger.info("🛑 Application shutdown")
+    logger.info(" Application shutdown")
 
 app = FastAPI(
     title=settings.PROJECT_NAME,

@@ -8,7 +8,7 @@ DATABASE_URL = settings.DATABASE_URL
 if DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
-# 🚨 Neon pooler-safe engine
+#  Neon pooler-safe engine
 engine = create_engine(
     DATABASE_URL,
     pool_pre_ping=True,
