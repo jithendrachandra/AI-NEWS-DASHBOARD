@@ -1,7 +1,7 @@
 # AI News Dashboard
 
 > A production-grade news aggregation platform leveraging HuggingFace's AI capabilities for intelligent content discovery and analysis.
-
+![alt text](<AI News Dashboard-Page-1.jpg>)
 ![Dashboard Preview](assets/Dashboard-interface.png)
 
 ## Overview
